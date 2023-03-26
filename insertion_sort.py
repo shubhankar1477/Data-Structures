@@ -7,6 +7,7 @@ def insertion_sort(array):
             j -= 1
         array[j + 1] = key_item
     return array
-        
+
+
 if __name__ == '__main__':
     print(insertion_sort([8, 2, 6, 4, 5]))
