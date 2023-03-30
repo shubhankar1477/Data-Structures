@@ -10,6 +10,7 @@ class LinkedList:
     def __init__(self,values = None) -> None:
         self.head = None
         self.tail = None
+        self._len= 0
 
         if values is not None:
             self.add_multiple_nodes(values)
@@ -30,6 +31,7 @@ class LinkedList:
         else:
             self.tail.next = Node(value)
             self.tail = self.tail.next
+        self._len+=1
         return self.tail
 
     def add_multiple_nodes(self,values):
@@ -51,6 +53,60 @@ class LinkedList:
     def values(self):
         return [node.value for node in self]
     
+    def _find_value(self,curr, prev,value):
+        while curr:
+            if curr.value == value:
+                return curr,prev,True
+            prev = curr
+            curr = curr.next
+        return curr, prev , False
+    def __contains__(self, value):
+        _, _, found = self._find_value(self.head, None, value)
+        return found
+    
+    def remove(self,value):
+        node, prev, found = self._find_value(self.head, None, value)
+        if not node:
+            raise ValueError()
+        if prev :
+            prev.next = node.next
+        else:
+            self.head = node.next 
+        if not node.next:
+            self.tail = prev
+        self._len-=1
+
+    def reverse(self):
+        curr = self.head
+        prev = None
+        while curr:
+            self._next  = curr.next
+            curr.next = prev
+            prev = curr
+            curr = self._next
+        self.head = prev
+        return self.head
+    
+    def sort(self):
+        curr  = self.head
+        index = None
+
+        if curr is None:
+            return 
+        else:
+            while curr:
+                index = curr.next
+                while index:
+                    if curr.value > index.value:
+                        temp = curr.value
+                        curr.value = index.value
+                        index.value = temp
+                    index = index.next
+                curr = curr.next
+
+
+
+    
 class DoublyLinkedList(LinkedList):
     def add_node(self, value):
         if self.head is None:
@@ -68,8 +124,17 @@ class DoublyLinkedList(LinkedList):
             current_head.prev = self.head
         return self.head
     
+    
 if __name__ == '__main__':
     li = LinkedList()
     li.add_node(1)
-    li.add_node(8)
+    li.add_node(0)
+    li.add_node(9)
+
+    # print(li.__contains__(5))
+    # print(li.__str__())
+    # print(li.remove(8))
     print(li.__str__())
+    print(li.sort())
+    print(li.__str__())
+
